@@ -1,21 +1,14 @@
 # Bass
 
-Bass makes it easy to use utilities written for Bash in
-[fish shell](https://github.com/fish-shell/fish-shell/).
+Bass makes it easy to use utilities written for Bash in [fish shell](https://github.com/fish-shell/fish-shell/).
 
-Regular bash scripts can be used in fish shell just as scripts written in any
-language with proper shebang or explicitly using the interpreter (i.e. using
-`bash script.sh`). However, many utilities, such as virtualenv, modifies the
-shell environment and requires to be sourced, and therefore cannot be used
-in fish. Sometimes, counterparts (such as the excellent
-[virtualfish](http://virtualfish.readthedocs.org/en/latest/)) are
-created, but that's often not the case.
+Regular bash scripts can be used in fish shell just as scripts written in any language with proper shebang or explicitly using the interpreter (i.e. using `bash script.sh`). However, many utilities, such as virtualenv, modify the shell environment and need to be sourced, and therefore cannot be used in fish. Sometimes, counterparts (such as the excellent [virtualfish](http://virtualfish.readthedocs.org/en/latest/)) are created, but that's often not the case.
 
-Bass is created to make it possible to use bash uilities in fish shell without
-any modification. It works by capturing what environment variables are modified
-by the utility of interest, and replay the changes in fish.
+Bass is created to make it possible to use bash uilities in fish shell without any modification. It works by capturing what environment variables are modifiedby the utility of interest, and replay the changes in fish.
 
 # Installation
+
+## Manual
 
 Use the Makefile.
 
@@ -24,6 +17,23 @@ Use the Makefile.
 `make uninstall` will remove those two files.
 
 Relaunch the shell for the change to take effect.
+
+## Using [Fisherman](https://github.com/fisherman/fisherman)
+
+```fish
+fisher edc/bass
+```
+You are recommened to use Fisherman > 2.0.
+
+## Using [fundle](https://github.com/tuvistavie/fundle)
+
+Add
+
+```
+fundle plugin 'edc/bass'
+```
+
+to your fish config, relaunch the shell and run `fundle install`.
 
 # Example
 
@@ -46,11 +56,13 @@ Bass has a debug option so you can see what happened:
 set -g -x X 4
 ```
 
+## nvm
+
 Here is a more realistic example, using the excellent
 [nvm](https://github.com/creationix/nvm):
 
 ```
-> bass source ~/.nvm/nvm.sh ';' nvm use iojs
+> bass source ~/.nvm/nvm.sh --no-use ';' nvm use iojs
 Now using io.js v1.1.0
 ```
 
@@ -67,22 +79,22 @@ After the command, iojs is accessible:
 You can then very easily pack the command as a function and feel more at home:
 
 ```
-> funced mynvm
-mynvm> function mynvm
-           bass source ~/.nvm/nvm.sh ';' nvm $argv
+> funced nvm
+nvm> function nvm
+           bass source ~/.nvm/nvm.sh --no-use ';' nvm $argv
        end
 
-> mynvm list
+> nvm list
 ->  iojs-v1.1.0
          system
-> mynvm ls-remote
+> nvm ls-remote
         v0.1.14
         v0.1.15
 ...
 ```
 
+(`--no-use` is an important option to `nvm.sh`. See [#13](https://github.com/edc/bass/issues/13) for background.)
+
 # Caveats
 
-At the moment, Bass does not work with interactive utilities. This is not hard
-to fix, but I cannot think of a use case. File a ticket if this is something
-you find missing.
+At the moment, Bass does not work with interactive utilities. This is not hard to fix, but I cannot think of a use case. File a ticket if this is something you find missing.
