@@ -1,0 +1,6 @@
+#!/bin/bash
+
+git remote remove origin
+git remote add origin git@github.com:yjpark/bass.git
+
+git remote add upstream git@github.com:edc/bass.git
